@@ -1,0 +1,1 @@
+window.Delivery = require('../src/js/app.js');
