@@ -24,7 +24,7 @@ $.extend(Method.prototype, {
 		// l(this.date)
 	},
 	setOptions: function(options) {
-		this.options = $.extend({}, Delivery.defaults, options);
+		this.options = $.extend({}, options);
 	},
 	getDeliveryDate: function() {
 		var days = this.options.days - 1;
