@@ -1,1 +1,1 @@
-return require('./src/js/app');
+module.exports = require('./src/js/app');
