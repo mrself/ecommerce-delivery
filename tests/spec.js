@@ -1,13 +1,13 @@
 var assert = function(data) {
 	expect(data).toBeTruthy();
-}
+};
 
 describe('Economy method at 10 am', function() {
 	
 	function makeDate (y, m, d, h) {
 		var timezone = -5;
 		var utc = timezone * 3600000;
-		var date = new Date()
+		var date = new Date();
 		var time = date.getTime() + date.getTimezoneOffset() * 60000 + utc;
 		date = new Date(time);
 		date.setFullYear(y);
@@ -61,11 +61,11 @@ describe('Method #getDeliveryDate', function() {
 	});
 
 	it('add one more day if it is after 1 pm and if it is a business day', function() {
-		makeIt(new Date(2016, 5, 13, 14), 2, new Date(2016, 5, 15))
+		makeIt(new Date(2016, 5, 13, 14), 2, new Date(2016, 5, 15));
 	});
 
 	it('do not add one more day if it is after 1 pm and if it is a holiday', function() {
-		makeIt(new Date(2016, 5, 13, 14), 2, new Date(2016, 5, 15))
+		makeIt(new Date(2016, 5, 13, 14), 2, new Date(2016, 5, 15));
 	});
 });
 
@@ -80,12 +80,12 @@ describe('Method #getDeliveryPrice', function() {
 				}, options));
 				return delivery.getDeliveryPrice();
 			};
-		})
+		});
 		it ('get price considering product weight', function() {
 			var price = this.getPrice({
 				productWeight: 4,
 				rate: [{weightTo: 4.00, price: 8.50}],
-			})
+			});
 			assert(price == 8.50);
 		});
 	});
@@ -100,12 +100,12 @@ describe('Method #getDeliveryPrice', function() {
 				}, options));
 				return delivery.getDeliveryPrice();
 			};
-		})
+		});
 		it ('get price considering product weight', function() {
 			var price = this.getPrice({
 				productWeight: 6,
 				rate: [{weightTo: 6.99, price: 13.50}],
-			})
+			});
 			assert(price == 13.50);
 		});
 	});
