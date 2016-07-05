@@ -9,8 +9,6 @@ $.extend(Method.prototype, {
 	init: function(options) {
 		this.setOptions(options);
 		this.setDate();
-		// this.days = days;
-		// this.tz = tz;
 	},
 	setDate: function() {
 		var date = this.options.date;
@@ -21,7 +19,6 @@ $.extend(Method.prototype, {
 			.month(date.getMonth())
 			.date(date.getDate())
 			.hours(date.getHours());
-		// l(this.date)
 	},
 	setOptions: function(options) {
 		this.options = $.extend({}, options);
@@ -29,18 +26,13 @@ $.extend(Method.prototype, {
 	getDeliveryDate: function() {
 		var days = this.options.days - 1;
 		var date = this.options.date.clone();
-		// l(this.date.toDate() )
 		if (date.hours() > 13 && !this.isHoliday(date)) days++;
 		var count = 0;
-		// l(days)
 		while((days || this.isHoliday(date)) && ++count < 100) {
 			if (!this.isHoliday(date)) {
 				days--;
 			}
 			date.add(1, 'd');
-			// l(days)
-			// if (!BusinessDate.make(date.toDate()).isBusinessDay() && !days) days++;
-			// l(date.toDate())
 		}
 		return date.toDate();
 	},
@@ -50,7 +42,7 @@ $.extend(Method.prototype, {
 		var weight = this.options.productWeight;
 		var price;
 		this.options.rate.forEach(function(rateItem) {
-			if (rateItem.weightTo >= weight) price = rateItem.price;
+			if (rateItem.weightTo >= weight && !price) price = rateItem.price;
 		});
 		return price;
 	},

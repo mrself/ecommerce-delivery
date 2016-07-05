@@ -104,7 +104,7 @@ describe('Method #getDeliveryPrice', function() {
 		it ('get price considering product weight', function() {
 			var price = this.getPrice({
 				productWeight: 6,
-				rate: [{weightTo: 6.99, price: 13.50}],
+				rate: [{weightTo: 6.99, price: 13.50}, {weightTo: 7.99, price: 17.50}],
 			});
 			assert(price == 13.50);
 		});
