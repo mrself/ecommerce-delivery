@@ -84,9 +84,9 @@ describe('Method #getDeliveryPrice', function() {
 		it ('get price considering product weight', function() {
 			var price = this.getPrice({
 				productWeight: 4,
-				rate: [{weightTo: 4.00, price: 8.50}],
+				rate: [{weightTo: 6.99, price: 13.50}, {weightTo: 7.99, price: 17.50}]
 			});
-			assert(price == 8.50);
+			assert(price == 13.50);
 		});
 	});
 
@@ -104,15 +104,14 @@ describe('Method #getDeliveryPrice', function() {
 		it ('get price considering product weight', function() {
 			var price = this.getPrice({
 				productWeight: 6,
-				rate: [{weightTo: 6.99, price: 13.50}, {weightTo: 7.99, price: 17.50}],
+				rate: [{weightTo: 6.99, price: 13.50}, {weightTo: 7.99, price: 17.50}]
 			});
-			assert(price == 13.50);
+			assert(price == 'Free');
 		});
 	});
 });
 
 function isEqualsDate (date1, date2) {
-	// l(arguments)
 	return date1.getYear() == date2.getYear() && 
 		date1.getMonth() == date2.getMonth() && 
 		date1.getDate() == date2.getDate();
