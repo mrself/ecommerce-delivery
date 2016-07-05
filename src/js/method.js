@@ -20,7 +20,7 @@ $.extend(Method.prototype, {
 			.year(date.getFullYear())
 			.month(date.getMonth())
 			.date(date.getDate())
-			.hours(date.getHours())
+			.hours(date.getHours());
 		// l(this.date)
 	},
 	setOptions: function(options) {
@@ -56,7 +56,7 @@ $.extend(Method.prototype, {
 	},
 
 	isHoliday: function(date) {
-		return !BusinessDate.make(date.toDate()).isBusinessDay()
+		return !BusinessDate.make(date.toDate()).isBusinessDay();
 	},
 });
 
