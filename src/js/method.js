@@ -39,7 +39,8 @@ $.extend(Method.prototype, {
 
 	getDeliveryPrice: function() {
 		var productPrice = this.options.productPrice;
-		if (productPrice > this.options.freeShippingPrice)
+		if (productPrice > this.options.freeShippingPrice && 
+			this.options.name == 'economy')
 			return 'Free';
 		var weight = this.options.productWeight;
 		var price;

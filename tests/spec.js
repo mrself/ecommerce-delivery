@@ -103,11 +103,33 @@ describe('Method #getDeliveryPrice', function() {
 		});
 		it ('get price considering product weight', function() {
 			var price = this.getPrice({
+				productPrice: 80,
+				freeShippingPrice: 40,
 				productWeight: 6,
 				rate: [{weightTo: 6.99, price: 13.50}, {weightTo: 7.99, price: 17.50}]
 			});
-			assert(price == 'Free');
+			assert(price == 13.5);
 		});
+		describe('free shipping is only for economy type', function() {
+			it('the type is economy', function() {
+				var price = this.getPrice({
+					productWeight: 6,
+					name: 'economy',
+					rate: [{weightTo: 6.99, price: 13.50}, {weightTo: 7.99, price: 17.50}]
+				});
+				assert(price == 'Free');
+			});
+			it('the type is not economy', function() {
+				var price = this.getPrice({
+					productPrice: 80,
+					freeShippingPrice: 40,
+					productWeight: 6,
+					rate: [{weightTo: 6.99, price: 13.50}, {weightTo: 7.99, price: 17.50}]
+				});
+				assert(price == 13.5);
+			});
+		});
+		
 	});
 });
 
