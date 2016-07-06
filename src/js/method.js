@@ -40,7 +40,7 @@ $.extend(Method.prototype, {
 	getDeliveryPrice: function() {
 		var productPrice = this.options.productPrice;
 		if (productPrice > this.options.freeShippingPrice && 
-			this.options.name == 'economy')
+			this.isEconomy())
 			return 'Free';
 		var weight = this.options.productWeight;
 		var price;
@@ -48,6 +48,10 @@ $.extend(Method.prototype, {
 			if (rateItem.weightTo >= weight && !price) price = rateItem.price;
 		});
 		return price;
+	},
+
+	isEconomy: function() {
+		return this.options.name && this.options.name.toLowerCase() == 'economy';
 	},
 
 	isHoliday: function(date) {

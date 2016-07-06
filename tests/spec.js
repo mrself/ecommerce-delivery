@@ -114,7 +114,9 @@ describe('Method #getDeliveryPrice', function() {
 			it('the type is economy', function() {
 				var price = this.getPrice({
 					productWeight: 6,
-					name: 'economy',
+					name: 'Economy',
+					productPrice: 80,
+					freeShippingPrice: 40,
 					rate: [{weightTo: 6.99, price: 13.50}, {weightTo: 7.99, price: 17.50}]
 				});
 				assert(price == 'Free');
