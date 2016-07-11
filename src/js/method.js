@@ -14,11 +14,7 @@ $.extend(Method.prototype, {
 		var date = this.options.date;
 		var utc = this.options.timezone * 3600000;
 		var time = date.getTime() + date.getTimezoneOffset() * 60000 + utc;
-		this.options.date = moment(time)
-			.year(date.getFullYear())
-			.month(date.getMonth())
-			.date(date.getDate())
-			.hours(date.getHours());
+		this.options.date = moment(time);
 	},
 	setOptions: function(options) {
 		this.options = $.extend({}, options);
