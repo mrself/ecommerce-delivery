@@ -7,7 +7,7 @@ gulp.task('browserSync', function() {
 		server: {
 			baseDir: config.dir
 		},
-		files: [config.dir + '/**/*.html'],
+		files: [config.dir + '/**/*.html', config.dir + '/spec.js'],
 		browser: []
 	});
 });
