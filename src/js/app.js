@@ -1,5 +1,6 @@
 var BusinessDate = require('usa-holidays');
 var Method = require('./method');
+Delivery.moment = require('moment');
 
 function Delivery () {
 	

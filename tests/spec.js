@@ -1,71 +1,68 @@
+/**
+ * This tests could be run only for UTc +3
+ */
+
 var assert = function(data) {
 	expect(data).toBeTruthy();
 };
+var m = Delivery.moment;
 
-describe('Economy method at 10 am', function() {
-	
-	function makeDate (y, m, d, h) {
-		var timezone = -5;
-		var utc = timezone * 3600000;
-		var date = new Date();
-		var time = date.getTime() + date.getTimezoneOffset() * 60000 + utc;
-		date = new Date(time);
-		date.setFullYear(y);
-		date.setMonth(m);
-		date.setDate(d);
-		date.setHours(h);
-		return date;
-	}
-	function makeIt (startDate, expectedDate, deliveryMethod) {
-		var deliveryDate = Delivery.Method.make({
-			date: startDate,
-			days: 8,
-			timezone: -5
-		}).getDeliveryDate();
-		assert(isEqualsDate(expectedDate, deliveryDate));
-	}
+describe('#formatDate', function() {
+	it ('return date in delivery timezone', function() {
+		var startDate = new Date(2016, 6, 14, 18);
+		var method = new Delivery.Method();
+		method.options = {timezone: -5, date: startDate};
+		method.setDate(startDate);
+		assert(method.options.date.hours() == 10);
+	});
+});
 
-	it ('The estimated delivery date for Economy is the 13th', function() {
-		makeIt(makeDate(2016, 5, 2, 10), new Date(2016, 5, 13), 'Economy');
+describe('#firstBusinessDay', function() {
+	it ('if entry date is a business date, return it', function() {
+		var method = new Delivery.Method();
+		var date = m([2016, 6, 12]);
+		method.firstBusinessDate(date);
+		assert(isEqualsDate(date, m([2016, 6, 12])));
 	});
 
-	it('should consider weekends', function() {
-		makeIt(new Date(2016, 6, 23, 10), new Date(2016, 7, 3), 'Economy');
-	});
-
-	it('should consider federal holidays', function() {
-		makeIt(makeDate(2016, 1, 15, 10), new Date(2016, 1, 25), 'Economy');
-	});
-
-	it('should consider federal holidays and weekends (the 4th of July is Independence Day', function() {
-		makeIt(new Date(2016, 6, 2, 10), new Date(2016, 6, 14), 'Economy');
+	it('if entry date is a holiday, find first business date', function() {
+		var method = new Delivery.Method();
+		var date = m([2016, 6, 16]);
+		method.firstBusinessDate(date);
+		assert(isEqualsDate(date, m([2016, 6, 18])));
 	});
 });
 
 describe('Method #getDeliveryDate', function() {
-	function makeIt (date, daysQty, expectedDate) {
-		var deliveryDate = Delivery.Method.make({
-			date: date,
-			days: daysQty,
-			timezone: -5
-		}).getDeliveryDate();
-		assert(isEqualsDate(deliveryDate, expectedDate));
+	function makeIt(dateOptions, days, expectedDate) {
+		var method = new Delivery.Method();
+		var date = Delivery.moment();
+		date.utcOffset(dateOptions.tz || -5);
+		date.set({
+			year: dateOptions.y,
+			month: dateOptions.m,
+			date: dateOptions.d,
+			hour: dateOptions.h || 0});
+		method.options = {days: days, date: date};
+		expectedDate = Delivery.moment(expectedDate).toDate();
+		assert(isEqualsDate(method.getDeliveryDate(), expectedDate));
 	}
-	it('consider all business day in delivery days', function() {
-		makeIt(new Date(2016, 5, 21), 3, new Date(2016, 5, 23));
-		makeIt(new Date(2016, 5, 6), 4, new Date(2016, 5, 9));
+	it('if entry date is a business date and before 1pm just add needed days', function() {
+		makeIt({y: 2016, m: 6, d: 21, h:10}, 1, [2016, 6, 22]);
+		makeIt({y: 2016, m: 6, d: 18, h:10}, 4, [2016, 6, 22]);
 	});
-	it('do not consider weekends in delivery days', function() {
-		makeIt(new Date(2016, 5, 3), 2, new Date(2016, 5, 6));
-		makeIt(new Date(2016, 5, 11), 2, new Date(2016, 5, 14));
+	it('if entry date is after 1pm add one more day', function() {
+		makeIt({y: 2016, m: 6, d: 20, h:14}, 1, [2016, 6, 22]);
 	});
-
-	it('add one more day if it is after 1 pm and if it is a business day', function() {
-		makeIt(new Date(2016, 5, 13, 14), 2, new Date(2016, 5, 15));
+	it('if entry date is a Friday and after 1pm start to add from Monday', function() {
+		makeIt({y: 2016, m: 6, d: 8, h:14}, 1, [2016, 6, 12]);
 	});
-
-	it('do not add one more day if it is after 1 pm and if it is a holiday', function() {
-		makeIt(new Date(2016, 5, 13, 14), 2, new Date(2016, 5, 15));
+	it('if entry date is a holiday, start to add from Monday', function() {
+		makeIt({y: 2016, m: 6, d: 9}, 2, [2016, 6, 13]);
+	});
+	it('delivery date could not be a holiday', function() {
+		makeIt({y: 2016, m: 6, d: 14, h: 14}, 1, [2016, 6, 18]);
+		makeIt({y: 2016, m: 6, d: 14, h: 12}, 1, [2016, 6, 15]);
 	});
 });
 
@@ -136,9 +133,17 @@ describe('Method #getDeliveryPrice', function() {
 });
 
 function isEqualsDate (date1, date2) {
-	return date1.getYear() == date2.getYear() && 
-		date1.getMonth() == date2.getMonth() && 
-		date1.getDate() == date2.getDate();
+	l(date1)
+	l(date2)
+	if (date1 instanceof Date) {
+		return date1.getYear() == date2.getYear() && 
+			date1.getMonth() == date2.getMonth() && 
+			date1.getDate() == date2.getDate();
+	} else {
+		return date1.year() == date2.year() && 
+			date1.month() == date2.month() && 
+			date1.date() == date2.date();
+	}
 }
 
 

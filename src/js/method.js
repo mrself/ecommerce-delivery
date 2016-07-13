@@ -11,26 +11,30 @@ $.extend(Method.prototype, {
 		this.setDate();
 	},
 	setDate: function() {
-		var date = this.options.date;
-		var utc = this.options.timezone * 3600000;
-		var time = date.getTime() + date.getTimezoneOffset() * 60000 + utc;
-		this.options.date = moment(time);
+		var date = moment(this.options.date);
+		this.utcOffset = date.utcOffset();
+		this.options.date = date.utcOffset(this.options.timezone);
 	},
 	setOptions: function(options) {
 		this.options = $.extend({}, options);
 	},
 	getDeliveryDate: function() {
-		var days = this.options.days - 1;
 		var date = this.options.date.clone();
-		if (date.hours() > 13 && !this.isHoliday(date)) days++;
-		var count = 0;
-		while((days || this.isHoliday(date)) && ++count < 100) {
-			if (!this.isHoliday(date)) {
-				days--;
-			}
+		if (date.hours() > 13) {
+			if (date.day() == 5) date.add(3, 'd');
+			else date.add(1, 'd');
+		}
+		this.firstBusinessDate(date);
+		date.add(this.options.days, 'd');
+		this.firstBusinessDate(date);
+		date.utcOffset(this.utcOffset);
+		return date.toDate();
+	},
+
+	firstBusinessDate: function(date) {
+		while (this.isHoliday(date)) {
 			date.add(1, 'd');
 		}
-		return date.toDate();
 	},
 
 	getDeliveryPrice: function() {
