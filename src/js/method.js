@@ -56,7 +56,4 @@ $.extend(Method, {
 	},
 });
 
-function l (x) {
-	console.log(x);
-}
 module.exports = Method;
