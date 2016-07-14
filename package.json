@@ -1,6 +1,6 @@
 {
   "name": "ecommerce-delivery",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Estimate delivery date and cost for each delivery method",
   "main": "index.js",
   "directories": {
