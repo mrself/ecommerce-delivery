@@ -49,8 +49,8 @@ $.extend(Delivery, {
 	 */
 	isShipDate: function(date) {
 		var shipDate = date.clone();
-		this.firstBusinessDate(date);
-		return date.hours() < 13 && shipDate.isSame(date);
+		this.getShipDate(shipDate);
+		return shipDate.isSame(date);
 	},
 
 	getShipDate: function(date) {
