@@ -45,7 +45,7 @@ $.extend(Delivery, {
 	},
 	/**
 	 * Is a date could be a ship date?
-	 * @param  {Date}  date
+	 * @param  {Moment}  date
 	 * @return {Boolean}
 	 */
 	isShipDate: function(date) {
@@ -54,6 +54,11 @@ $.extend(Delivery, {
 		return shipDate.isSame(date);
 	},
 
+	/**
+	 * Get date when an order will be shipped
+	 * @param  {Moment} date
+	 * @return {Moment}
+	 */
 	getShipDate: function(date) {
 		if (date.day() == 5 && date.hours() > 13) {
 			date.add(3, 'd');
@@ -62,6 +67,11 @@ $.extend(Delivery, {
 		return date;
 	},
 
+	/**
+	 * Transform entry date to first business date
+	 * @param  {Moment} date
+	 * @return {void}
+	 */
 	firstBusinessDate: function(date) {
 		while (this.isHoliday(date)) {
 			date.add(1, 'd');
