@@ -42,13 +42,34 @@ $.extend(Delivery, {
 		inst.init(options);
 		return inst;
 	},
+	/**
+	 * Is a date could be a ship date?
+	 * @param  {Date}  date
+	 * @return {Boolean}
+	 */
 	isShipDate: function(date) {
-		if (!this.moment.isMoment())
-			date = this.moment(date);
 		var shipDate = date.clone();
-		Method.prototype.firstBusinessDate.call(Method.prototype, date);
+		this.firstBusinessDate(date);
 		return date.hours() < 13 && shipDate.isSame(date);
-	}
+	},
+
+	getShipDate: function(date) {
+		if (date.day() == 5 && date.hours() > 13) {
+			date.add(3, 'd');
+		}
+		this.firstBusinessDate(date);
+		return date;
+	},
+
+	firstBusinessDate: function(date) {
+		while (this.isHoliday(date)) {
+			date.add(1, 'd');
+		}
+	},
+
+	isHoliday: function(date) {
+		return !BusinessDate.make(date.toDate()).isBusinessDay();
+	},
 });
 
 

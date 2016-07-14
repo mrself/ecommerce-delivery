@@ -7,6 +7,14 @@ var assert = function(data) {
 };
 var m = Delivery.moment;
 
+describe('#getShipDate', function() {
+	it ('for a workdate it is the same', function() {
+		var workDate = Delivery.moment([2016, 6, 14]);
+		var shipDate = Delivery.getShipDate(workDate);
+		assert(workDate.isSame(shipDate));
+	});
+});
+
 describe('static #isShipDate', function() {
 	it('a business date is a ship date', function() {
 		var workDate = Delivery.moment([2016, 6, 14]);
