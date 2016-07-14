@@ -41,18 +41,16 @@ describe('#formatDate', function() {
 	});
 });
 
-describe('#firstBusinessDay', function() {
+describe('static #firstBusinessDay', function() {
 	it ('if entry date is a business date, return it', function() {
-		var method = new Delivery.Method();
 		var date = m([2016, 6, 12]);
-		method.firstBusinessDate(date);
+		Delivery.firstBusinessDate(date);
 		assert(isEqualsDate(date, m([2016, 6, 12])));
 	});
 
 	it('if entry date is a holiday, find first business date', function() {
-		var method = new Delivery.Method();
 		var date = m([2016, 6, 16]);
-		method.firstBusinessDate(date);
+		Delivery.firstBusinessDate(date);
 		assert(isEqualsDate(date, m([2016, 6, 18])));
 	});
 });

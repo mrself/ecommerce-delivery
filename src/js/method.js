@@ -1,5 +1,4 @@
 var moment = require('moment');
-var BusinessDate = require('usa-holidays');
 
 function Method () {
 	
@@ -24,17 +23,11 @@ $.extend(Method.prototype, {
 			if (date.day() == 5) date.add(3, 'd');
 			else date.add(1, 'd');
 		}
-		this.firstBusinessDate(date);
+		Method.Delivery.firstBusinessDate(date);
 		date.add(this.options.days, 'd');
-		this.firstBusinessDate(date);
+		Method.Delivery.firstBusinessDate(date);
 		date.utcOffset(this.utcOffset);
 		return date.toDate();
-	},
-
-	firstBusinessDate: function(date) {
-		while (this.isHoliday(date)) {
-			date.add(1, 'd');
-		}
 	},
 
 	getDeliveryPrice: function() {
@@ -52,11 +45,7 @@ $.extend(Method.prototype, {
 
 	isEconomy: function() {
 		return this.options.name && this.options.name.toLowerCase() == 'economy';
-	},
-
-	isHoliday: function(date) {
-		return !BusinessDate.make(date.toDate()).isBusinessDay();
-	},
+	}
 });
 
 $.extend(Method, {
