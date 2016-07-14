@@ -7,6 +7,22 @@ var assert = function(data) {
 };
 var m = Delivery.moment;
 
+describe('static #isShipDate', function() {
+	it('a business date is a ship date', function() {
+		var workDate = Delivery.moment([2016, 6, 14]);
+		assert(Delivery.isShipDate(workDate));
+	});
+	it ('a holiday is not ship date', function() {
+		var sunday = Delivery.moment([2016, 6, 17]);
+		assert(!Delivery.isShipDate(sunday));
+	});
+	it('Friday after 1 pm is not a ship date' ,function() {
+		var friday = Delivery.moment([2016, 6, 15]);
+		friday.hours(14);
+		assert(!Delivery.isShipDate(friday));
+	});
+});
+
 describe('#formatDate', function() {
 	it ('return date in delivery timezone', function() {
 		var startDate = new Date(2016, 6, 14, 18);
@@ -133,8 +149,8 @@ describe('Method #getDeliveryPrice', function() {
 });
 
 function isEqualsDate (date1, date2) {
-	l(date1)
-	l(date2)
+	// l(date1)
+	// l(date2)
 	if (date1 instanceof Date) {
 		return date1.getYear() == date2.getYear() && 
 			date1.getMonth() == date2.getMonth() && 
