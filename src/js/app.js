@@ -43,10 +43,11 @@ $.extend(Delivery, {
 		return inst;
 	},
 	isShipDate: function(date) {
-		var mdate = this.moment(date);
-		var shipDate = mdate.clone();
-		Method.prototype.firstBusinessDate.call(Method.prototype, mdate);
-		return mdate.hours() < 13 && shipDate.isSame(mdate);
+		if (!this.moment.isMoment())
+			date = this.moment(date);
+		var shipDate = date.clone();
+		Method.prototype.firstBusinessDate.call(Method.prototype, date);
+		return date.hours() < 13 && shipDate.isSame(date);
 	}
 });
 
