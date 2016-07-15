@@ -1,4 +1,3 @@
-var BusinessDate = require('usa-holidays');
 var Method = require('./method');
 Method.Delivery = Delivery;
 Delivery.moment = require('moment');
@@ -42,45 +41,7 @@ $.extend(Delivery, {
 		var inst = new this;
 		inst.init(options);
 		return inst;
-	},
-	/**
-	 * Is a date could be a ship date?
-	 * @param  {Moment}  date
-	 * @return {Boolean}
-	 */
-	isShipDate: function(date) {
-		var shipDate = date.clone();
-		this.getShipDate(shipDate);
-		return shipDate.isSame(date);
-	},
-
-	/**
-	 * Get date when an order will be shipped
-	 * @param  {Moment} date
-	 * @return {Moment}
-	 */
-	getShipDate: function(date) {
-		if (date.day() == 5 && date.hours() > 13) {
-			date.add(3, 'd');
-		}
-		this.firstBusinessDate(date);
-		return date;
-	},
-
-	/**
-	 * Transform entry date to first business date
-	 * @param  {Moment} date
-	 * @return {void}
-	 */
-	firstBusinessDate: function(date) {
-		while (this.isHoliday(date)) {
-			date.add(1, 'd');
-		}
-	},
-
-	isHoliday: function(date) {
-		return !BusinessDate.make(date.toDate()).isBusinessDay();
-	},
+	}
 });
 
 

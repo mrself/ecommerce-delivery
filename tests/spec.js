@@ -7,10 +7,21 @@ var assert = function(data) {
 };
 var m = Delivery.moment;
 
+describe('.makeFromDate', function() {
+	it ('set `date` property in standard format', function() {
+		var date = m([2016, 6, 15]);
+		date.utcOffset(6);
+		date.hours();
+		var method = Delivery.Method.makeFromDate(date, -5);
+		assert(method.date.utcOffset() == -5 * 60);
+	});
+});
+
 describe('#getShipDate', function() {
 	it ('for a workdate it is the same', function() {
 		var workDate = Delivery.moment([2016, 6, 14]);
-		var shipDate = Delivery.getShipDate(workDate);
+		var method = Delivery.Method.makeFromDate(workDate);
+		var shipDate = method.getShipDate(workDate);
 		assert(workDate.isSame(shipDate));
 	});
 });
@@ -18,16 +29,20 @@ describe('#getShipDate', function() {
 describe('static #isShipDate', function() {
 	it('a business date is a ship date', function() {
 		var workDate = Delivery.moment([2016, 6, 14]);
-		assert(Delivery.isShipDate(workDate));
+		var method = Delivery.Method.makeFromDate(workDate);
+		assert(method.isShipDate());
 	});
 	it ('a holiday is not ship date', function() {
 		var sunday = Delivery.moment([2016, 6, 17]);
-		assert(!Delivery.isShipDate(sunday));
+		var method = Delivery.Method.makeFromDate(sunday);
+		assert(!method.isShipDate());
 	});
 	it('Friday after 1 pm is not a ship date' ,function() {
-		var friday = Delivery.moment([2016, 6, 15]);
+		var friday = Delivery.moment([2016, 6, 15, 8]);
+		friday.utcOffset(-5);
 		friday.hours(14);
-		assert(!Delivery.isShipDate(friday));
+		var method = Delivery.Method.makeFromDate(friday);
+		assert(!method.isShipDate());
 	});
 });
 
@@ -44,13 +59,15 @@ describe('#formatDate', function() {
 describe('static #firstBusinessDay', function() {
 	it ('if entry date is a business date, return it', function() {
 		var date = m([2016, 6, 12]);
-		Delivery.firstBusinessDate(date);
+		var method = Delivery.Method.makeFromDate(date);
+		method.firstBusinessDate(date);
 		assert(isEqualsDate(date, m([2016, 6, 12])));
 	});
 
 	it('if entry date is a holiday, find first business date', function() {
 		var date = m([2016, 6, 16]);
-		Delivery.firstBusinessDate(date);
+		var method = Delivery.Method.makeFromDate(date);
+		method.firstBusinessDate(date);
 		assert(isEqualsDate(date, m([2016, 6, 18])));
 	});
 });
