@@ -31,7 +31,7 @@ $.extend(Method.prototype, {
 		this.date = date;
 	},
 	setOptions: function(options) {
-		this.options = $.extend({}, options);
+		this.options = $.extend({}, Method.defaults, options);
 	},
 
 	/**
@@ -57,8 +57,8 @@ $.extend(Method.prototype, {
 		this.firstBusinessDate(date);
 		date.add(this.options.days, 'd');
 		this.firstBusinessDate(date);
-		this.dateToLocal(date);
-		date.utcOffset(this.utcOffset);
+		if (this.options.formatDateToLocal)
+			this.dateToLocal(date);
 		return date.toDate();
 	},
 
@@ -82,6 +82,8 @@ $.extend(Method.prototype, {
 			date.add(3, 'd');
 		}
 		this.firstBusinessDate(date);
+		if (this.options.formatDateToLocal)
+			this.dateToLocal(date);
 		return date;
 	},
 
@@ -146,6 +148,9 @@ $.extend(Method, {
 		inst.setDate(date);
 		return inst;
 	},
+	defaults: {
+		formatDateToLocal: false
+	}
 });
 
 module.exports = Method;
