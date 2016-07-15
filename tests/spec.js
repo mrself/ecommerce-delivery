@@ -36,8 +36,8 @@ describe('#formatDate', function() {
 		var startDate = new Date(2016, 6, 14, 18);
 		var method = new Delivery.Method();
 		method.options = {timezone: -5, date: startDate};
-		method.setDate(startDate);
-		assert(method.options.date.hours() == 10);
+		method.setDate();
+		assert(method.date.hours() == 10);
 	});
 });
 
@@ -67,6 +67,7 @@ describe('Method #getDeliveryDate', function() {
 			hour: dateOptions.h || 0});
 		method.options = {days: days, date: date};
 		expectedDate = Delivery.moment(expectedDate).toDate();
+		method.setDate();
 		assert(isEqualsDate(method.getDeliveryDate(), expectedDate));
 	}
 	it('if entry date is a business date and before 1pm just add needed days', function() {

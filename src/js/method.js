@@ -12,13 +12,14 @@ $.extend(Method.prototype, {
 	setDate: function() {
 		var date = moment(this.options.date);
 		this.utcOffset = date.utcOffset();
-		this.options.date = date.utcOffset(this.options.timezone);
+		date.utcOffset(this.options.timezone);
+		this.date = date;
 	},
 	setOptions: function(options) {
 		this.options = $.extend({}, options);
 	},
 	getDeliveryDate: function() {
-		var date = this.options.date.clone();
+		var date = this.date.clone();
 		if (date.hours() > 13) {
 			if (date.day() == 5) date.add(3, 'd');
 			else date.add(1, 'd');
@@ -52,6 +53,12 @@ $.extend(Method, {
 	make: function(options) {
 		var inst = new this;
 		inst.init(options);
+		return inst;
+	},
+
+	makeFromDate: function(date) {
+		var inst = new this;
+		inst.date = date;
 		return inst;
 	},
 });
